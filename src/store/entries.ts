@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Entry } from '../App';
+import { Entry } from './Entry';
 
 export const useEntries = create<EntryStore>((set, get) => ({
   currentEntry: undefined,

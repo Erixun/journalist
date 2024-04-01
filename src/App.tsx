@@ -31,11 +31,28 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 import { useEntries } from './store/entries';
 import { AppHeader } from './app/AppHeader';
 import { AppFooter } from './app/AppFooter';
+import { adjustHeight } from './utils/adjustHeight';
+import { executeQuery } from './utils/executeQuery';
+import { v4 as uuidv4 } from 'uuid';
+
+export const getEntries = async () => {
+  const results = await executeQuery('SELECT * FROM entries', []);
+  return results.map((entry: any) => ({
+    id: entry.id,
+    text: entry.text,
+    createdAt: new Date(entry.createdAt),
+    updatedAt: entry.updatedAt ? new Date(entry.updatedAt) : undefined,
+  }));
+}
 
 function App() {
-  const { currentEntry, setCurrentEntry, addEntry, updateEntry } = useEntries();
+  const { currentEntry, setCurrentEntry, addEntry, updateEntry, setEntries } = useEntries();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    getEntries().then(setEntries);
+  }, []);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -141,11 +158,31 @@ function App() {
 
                         const isFreshEntry = !currentEntry.id;
                         if (isFreshEntry) {
-                          entryToSet.id = Math.random().toString();
+                          entryToSet.id = uuidv4();//Math.random().toString();
                           entryToSet.createdAt = new Date();
                           addEntry(entryToSet);
+                          executeQuery(
+                            'INSERT INTO entries (id, text, createdAt) VALUES (?, ?, ?)',
+                            [
+                              entryToSet.id,
+                              entryToSet.text,
+                              entryToSet.createdAt.toISOString(),
+                            ]
+                          ).then((result) => {
+                            console.log(result);
+                          });
                         } else {
                           entryToSet.updatedAt = new Date();
+                          executeQuery(
+                            'UPDATE entries SET text = ?, updatedAt = ? WHERE id = ?',
+                            [
+                              entryToSet.text,
+                              entryToSet.updatedAt?.toISOString(),
+                              entryToSet.id,
+                            ]
+                          ).then((result) => {
+                            console.log(result);
+                          });
                           updateEntry(entryToSet);
                         }
                         setCurrentEntry(entryToSet);
@@ -346,16 +383,4 @@ export const AppDrawer = ({
       </DrawerContent>
     </Drawer>
   );
-};
-
-export type Entry = {
-  id?: string;
-  text: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-};
-
-export const adjustHeight = (textarea: HTMLTextAreaElement) => {
-  textarea.style.height = 'auto';
-  textarea.style.height = `${textarea.scrollHeight}px`;
 };

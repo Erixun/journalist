@@ -1,11 +1,5 @@
-# React + TypeScript + Vite
+# Journalist - using React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 ## Expanding the ESLint configuration
 
@@ -28,3 +22,44 @@ export default {
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+## Set up a containerized MYSQL Database
+
+1. Pull the MYSQL image from Docker Hub
+
+```bash
+docker pull mysql:5.7
+```
+
+2. Create a new container from the MYSQL image
+
+```bash
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=secret -d -p 3306:3306 mysql:5.7
+```
+
+3. Access the MYSQL container
+
+```bash
+docker exec -it mysql bash
+```
+
+4. Access the MYSQL database
+
+```bash
+mysql -u root -p
+```
+
+5. Create database and table
+
+```sql
+CREATE DATABASE journalistdb;
+USE journalistdb;
+CREATE TABLE entries (
+  id VARCHAR(255) PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  body TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+);
+```
+Now you may work with the `journalistdb` database and the `entries` table in your electron app.
