@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { Entry } from './Entry';
+import { EntryStore } from './EntryStore'
+import { create } from 'zustand'
 
 export const useEntries = create<EntryStore>((set, get) => ({
   currentEntry: undefined,
@@ -15,16 +15,4 @@ export const useEntries = create<EntryStore>((set, get) => ({
   setEntries: (entries) => set({ entries }),
   setCurrentEntry: (currentEntry) => set({ currentEntry }),
   clearEntries: () => set({ entries: [] }),
-}));
-
-export type EntryStore = {
-  currentEntry?: Entry;
-  entries: Entry[];
-  addEntry: (entry: Entry) => void;
-  getEntry: (id: string) => Entry | undefined;
-  updateEntry: (entry: Entry) => void;
-  deleteEntry: (id: string) => void;
-  setEntries: (entries: Entry[]) => void;
-  setCurrentEntry: (currentEntry: Entry | undefined) => void;
-  clearEntries: () => void;
-};
+}))

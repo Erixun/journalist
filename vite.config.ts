@@ -1,16 +1,47 @@
 import { defineConfig } from 'vite'
-import path from 'node:path'
+import { fileURLToPath } from 'url'
 import electron from 'vite-plugin-electron/simple'
+import path from 'node:path'
 import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: [
+      {
+        find: '@',
+        replacement: fileURLToPath(new URL('./src/', import.meta.url)),
+      },
+      { find: '@app', replacement: path.resolve(__dirname, './src/app/index') },
+      {
+        find: '@components',
+        replacement: path.resolve(__dirname, './src/components/index'),
+      },
+      {
+        find: '@store',
+        replacement: path.resolve(__dirname, './src/store/index'),
+      },
+      {
+        find: '@utils',
+        replacement: path.resolve(__dirname, './src/utils/index'),
+      },
+    ],
+  },
   plugins: [
     react(),
     electron({
       main: {
         // Shortcut of `build.lib.entry`.
         entry: 'electron/main.ts',
+        vite: {
+          build: {
+            rollupOptions: {
+              // Make sure to externalize deps that shouldn't be bundled
+              // into your library
+              external: ['sqlite3'],
+            },
+          },
+        },
       },
       preload: {
         // Shortcut of `build.rollupOptions.input`.

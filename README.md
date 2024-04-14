@@ -23,7 +23,7 @@ export default {
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
 
-## Set up a containerized MYSQL Database
+## How to set up a containerized MYSQL Database
 
 1. Pull the MYSQL image from Docker Hub
 

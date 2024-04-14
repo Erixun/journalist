@@ -1,5 +1,4 @@
-import { Flex, Container } from '@chakra-ui/react';
-
+import { Container, Flex } from '@chakra-ui/react'
 
 export const AppFooter = () => {
   return (
@@ -8,5 +7,5 @@ export const AppFooter = () => {
         <p>© 2021 Journalist</p>
       </Container>
     </Flex>
-  );
-};
+  )
+}
