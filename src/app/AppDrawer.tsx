@@ -30,6 +30,14 @@ export const AppDrawer = ({
 
   const [hasSearchTooltipDisabled, setHasSearchTooltipDisabled] = useState(true)
 
+  const handleDelete = (entryId?: string) => {
+    if (!entryId) return console.error('entryId is not defined')
+    deleteDbEntry(entryId)
+    if (currentEntry?.id === entryId) {
+      setCurrentEntry({ text: '' })
+    }
+  }
+
   return (
     <Drawer
       variant="secondary"
@@ -150,6 +158,11 @@ export const AppDrawer = ({
                       setCurrentEntry(entry)
                       onClose()
                     }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Delete') {
+                        handleDelete(entry.id)
+                      }
+                    }}
                   >
                     {entry.text
                       .substring(0, 55)
@@ -157,27 +170,11 @@ export const AppDrawer = ({
                   </Button>
                   <IconButton
                     {...styleBtnDeleteEntry}
-                    // bg={'transparent'}
-                    // zIndex={2}
-                    // opacity={0.5}
-                    // border={'none'}
-                    // _hover={{ opacity: 1, transform: 'translateX(-2px)' }}
-                    // _focusVisible={{
-                    //   opacity: 1,
-                    //   transform: 'translateX(-2px)',
-                    // }}
-                    // size={'sm'}
-                    // pos={'absolute'}
-                    // right={1}
-                    // top={1}
                     aria-label="Delete entry"
                     icon={<DeleteIcon />}
                     onClick={(e) => {
                       e.stopPropagation()
-                      if (entry.id) deleteDbEntry(entry.id)
-                      if (currentEntry?.id === entry.id) {
-                        setCurrentEntry({ text: '' })
-                      }
+                      handleDelete(entry.id)
                     }}
                   />
                 </Card>
