@@ -12,6 +12,7 @@ import {
   IconButton,
   Input,
   Stack,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { RefObject, useState } from 'react'
 import { styleBtnClearEntries, styleBtnDeleteEntry } from './styles'
@@ -38,6 +39,8 @@ export const AppDrawer = ({
     }
   }
 
+  const entryHoverBg = useColorModeValue('gray.200', 'gray.600')
+
   return (
     <Drawer
       variant="secondary"
@@ -58,7 +61,7 @@ export const AppDrawer = ({
         >
           <Tooltip label="(Ctrl + N)" placement="bottom-start">
             <Button
-              color={'black'}
+              // color={'black'}
               opacity={0.7}
               size={'sm'}
               variant={'ghost'}
@@ -143,13 +146,13 @@ export const AppDrawer = ({
                     m={0}
                     mx={-1}
                     _hover={{
-                      bg: 'gray.200',
+                      bg: entryHoverBg,
                       cursor: 'pointer',
                       zIndex: 1,
                       border: 'none',
                     }}
                     _focusVisible={{
-                      bg: 'gray.200',
+                      bg: entryHoverBg,
                       cursor: 'pointer',
                       zIndex: 1,
                     }}

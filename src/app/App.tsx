@@ -4,10 +4,12 @@ import {
   Box,
   ChakraProvider,
   Container,
+  extendTheme,
   Flex,
   Heading,
   IconButton,
   Textarea,
+  ThemeConfig,
   useDisclosure,
 } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
@@ -22,13 +24,26 @@ import {
 } from '@utils'
 import { EntryNote, Tooltip } from '@components'
 
+const config: ThemeConfig = {
+  initialColorMode: 'dark',
+  useSystemColorMode: false,
+}
+
+const theme = extendTheme({ config })
+
 export function App() {
   const { currentEntry, setCurrentEntry, setEntries } = useEntries()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const drawerBtnRef = useRef<HTMLButtonElement | null>(null)
+  const themeBtnRef = useRef<HTMLButtonElement | null>(null)
   const searchRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const keyDownHandler = handleKeyDown(drawerBtnRef, searchRef, onOpen)
+  const keyDownHandler = handleKeyDown(
+    drawerBtnRef,
+    themeBtnRef,
+    searchRef,
+    onOpen
+  )
 
   useEffect(() => {
     window.addEventListener('keydown', keyDownHandler)
@@ -46,12 +61,13 @@ export function App() {
   }, [currentEntry])
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <AppHeader
         onOpen={onOpen}
         onClose={onClose}
         isOpen={isOpen}
         drawerBtnRef={drawerBtnRef}
+        themeBtnRef={themeBtnRef}
       />
       <AppDrawer
         searchRef={searchRef}

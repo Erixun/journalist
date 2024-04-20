@@ -4,6 +4,7 @@ import { clearEntry, createNewEntry, submitEntry } from '@utils'
 export const handleKeyDown =
   (
     drawerBtnRef: MutableRefObject<HTMLButtonElement | null>,
+    themeBtnRef: MutableRefObject<HTMLButtonElement | null>,
     searchRef: RefObject<HTMLInputElement>,
     onOpen: () => void
   ) =>
@@ -20,6 +21,9 @@ export const handleKeyDown =
         break
       case 'n':
         createNewEntry()
+        break
+      case 't':
+        themeBtnRef.current?.click()
         break
       case 's':
         submitEntry()
