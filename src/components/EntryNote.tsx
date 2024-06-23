@@ -1,17 +1,20 @@
+import { StoredEntry } from '@/db/getEntries';
 import { Flex, Text } from '@chakra-ui/react';
 import { Entry } from '@store';
 
 
-export const EntryNote = ({ currentEntry }: { currentEntry?: Entry; }) => {
+export const EntryNote = ({ currentEntry }: { currentEntry?: Partial<StoredEntry>; }) => {
+
+  const {createdAt, updatedAt} = currentEntry || {};
   return (
     <Flex mt={-1} justifyContent={'space-between'} px={1}>
       <Text
-        visibility={currentEntry?.createdAt ? 'visible' : 'hidden'}
+        visibility={createdAt ? 'visible' : 'hidden'}
         fontSize={'xs'}
         color="gray.500"
       >
         Recorded{' '}
-        {currentEntry?.createdAt?.toLocaleString(undefined, {
+        {new Date(createdAt ?? '').toLocaleString(undefined, {
           hour12: false,
           hour: 'numeric',
           minute: 'numeric',
@@ -20,12 +23,12 @@ export const EntryNote = ({ currentEntry }: { currentEntry?: Entry; }) => {
         })}
       </Text>
       <Text
-        visibility={currentEntry?.updatedAt ? 'visible' : 'hidden'}
+        visibility={updatedAt ? 'visible' : 'hidden'}
         fontSize={'xs'}
         color="gray.500"
       >
         Updated{' '}
-        {currentEntry?.updatedAt?.toLocaleString(undefined, {
+        {new Date(updatedAt ?? '').toLocaleString(undefined, {
           hour12: false,
           hour: 'numeric',
           minute: 'numeric',

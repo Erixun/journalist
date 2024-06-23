@@ -1,12 +1,21 @@
-import { EntryDb } from '@store'
-import { executeQuery } from '@utils'
+import { get } from 'idb-keyval';
 
-export async function getEntries() {
-  const results = await executeQuery<EntryDb[]>('SELECT * FROM entries')
-  return results.map((entry) => ({
+
+export const getEntries = async () => {
+  const results = await get<StoredEntry[]>('entries') || [];
+
+  console.log('results', results)
+  return results.map((entry: StoredEntry) => ({
     id: entry.id,
     text: entry.text,
-    createdAt: new Date(entry.createdAt),
-    updatedAt: entry.updatedAt ? new Date(entry.updatedAt) : undefined,
-  }))
-}
+    createdAt: entry.createdAt,
+    updatedAt: entry.updatedAt ? entry.updatedAt : undefined,
+  }));
+};
+
+export type StoredEntry = {
+  id: string;
+  text: string;
+  createdAt: string;
+  updatedAt?: string;
+};

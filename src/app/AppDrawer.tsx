@@ -19,6 +19,7 @@ import { styleBtnClearEntries, styleBtnDeleteEntry } from './styles'
 import { useEntries } from '@store'
 import { clearDbEntries, deleteDbEntry } from '@utils'
 import { Tooltip } from '@components'
+import { set } from 'idb-keyval'
 
 export const AppDrawer = ({
   isOpen,
@@ -27,12 +28,18 @@ export const AppDrawer = ({
   searchRef,
 }: AppDrawerProps) => {
   const [search, setSearch] = useState<string>('')
-  const { entries, setCurrentEntry, currentEntry } = useEntries()
+  const { entries, setCurrentEntry, currentEntry, setEntries, clearEntries } = useEntries()
 
   const [hasSearchTooltipDisabled, setHasSearchTooltipDisabled] = useState(true)
 
   const handleDelete = (entryId?: string) => {
     if (!entryId) return console.error('entryId is not defined')
+
+    const filteredEntries = entries.filter((entry) => entry.id !== entryId)
+
+    set('entries', filteredEntries)
+    setEntries(filteredEntries)
+
     deleteDbEntry(entryId)
     if (currentEntry?.id === entryId) {
       setCurrentEntry({ text: '' })
@@ -195,7 +202,8 @@ export const AppDrawer = ({
             {...styleBtnClearEntries}
             leftIcon={<DeleteIcon />}
             onClick={() => {
-              clearDbEntries()
+              // clearDbEntries()
+              clearEntries()
               if (currentEntry?.id) setCurrentEntry({ text: '' })
             }}
           >
