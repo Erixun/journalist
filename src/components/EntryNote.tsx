@@ -1,11 +1,12 @@
-import { StoredEntry } from '@/db/getEntries';
-import { Flex, Text } from '@chakra-ui/react';
-import { Entry } from '@store';
+import { StoredEntry } from '@/utils/getEntries'
+import { Flex, Text } from '@chakra-ui/react'
 
-
-export const EntryNote = ({ currentEntry }: { currentEntry?: Partial<StoredEntry>; }) => {
-
-  const {createdAt, updatedAt} = currentEntry || {};
+export const EntryNote = ({
+  currentEntry,
+}: {
+  currentEntry?: Partial<StoredEntry>
+}) => {
+  const { createdAt, updatedAt } = currentEntry || {}
   return (
     <Flex mt={-1} justifyContent={'space-between'} px={1}>
       <Text
@@ -37,5 +38,5 @@ export const EntryNote = ({ currentEntry }: { currentEntry?: Partial<StoredEntry
         })}
       </Text>
     </Flex>
-  );
-};
+  )
+}

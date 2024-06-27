@@ -17,7 +17,6 @@ import {
 import { RefObject, useState } from 'react'
 import { styleBtnClearEntries, styleBtnDeleteEntry } from './styles'
 import { useEntries } from '@store'
-import { deleteDbEntry } from '@utils'
 import { Tooltip } from '@components'
 import { set } from 'idb-keyval'
 import { StoredEntry } from '@/utils/getEntries'
@@ -42,7 +41,6 @@ export const AppDrawer = ({
     set('entries', filteredEntries)
     setEntries(filteredEntries)
 
-    deleteDbEntry(entryId)
     if (currentEntry?.id === entryId) {
       setCurrentEntry({ text: '' })
     }
@@ -218,17 +216,13 @@ export const AppDrawer = ({
   )
 }
 
-
-
 export const byMostRecent = (a: StoredEntry, b: StoredEntry) =>
   new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 
 export const byQuery = (search: string) => (entry: StoredEntry) =>
   entry.text.toLowerCase().includes(search.toLowerCase())
 
-
-//TODO: export const toEntryCard = (entry: StoredEntry, index: number) => 
-  
+//TODO: export const toEntryCard = (entry: StoredEntry, index: number) =>
 
 type AppDrawerProps = {
   isOpen: boolean
