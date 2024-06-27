@@ -1,7 +1,7 @@
 import { Container, Flex, IconButton, useColorMode } from '@chakra-ui/react'
 import { MoonIcon, SunIcon, TimeIcon } from '@chakra-ui/icons'
 import { Tooltip } from '@components'
-import { RefObject } from 'react'
+import { MouseEventHandler, RefObject } from 'react'
 
 export const AppHeader = ({
   isOpen,
@@ -16,6 +16,14 @@ export const AppHeader = ({
   }
 
   const { toggleColorMode, colorMode } = useColorMode()
+
+  const handleToggleTheme: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault()
+    console.log(event)
+    const isMouseClick = event.type === 'click' && event.detail === 1
+    if (isMouseClick) themeBtnRef.current?.blur()
+    toggleColorMode()
+  }
   return (
     <Flex as="header" justifyContent={'center'}>
       <Container maxW="full" textAlign={'right'} padding={1}>
@@ -29,18 +37,13 @@ export const AppHeader = ({
             variant={'ghost'}
           />
         </Tooltip>
-        <Tooltip label="Toggle theme (Ctrl + T)">
+        <Tooltip label="Toggle theme (Ctrl + M)">
           <IconButton
             aria-label={'Toggle dark mode'}
             icon={colorMode === 'dark' ? <SunIcon /> : <MoonIcon />}
-            onClick={toggleColorMode}
+            onClick={handleToggleTheme}
             variant={'ghost'}
             ref={themeBtnRef}
-            onKeyDown={(e) => {
-              if (e.ctrlKey && e.key === 't') {
-                toggleColorMode()
-              }
-            }}
           />
         </Tooltip>
       </Container>

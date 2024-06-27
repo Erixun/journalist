@@ -1,27 +1,39 @@
-
 import { useEntries } from '@store'
 import { v4 as uuidv4 } from 'uuid'
+import { StoredEntry } from './getEntries'
 
 export const submitEntry = () => {
-  const { currentEntry, addEntry, updateEntry, setCurrentEntry } =
-    useEntries.getState()
-  if (!currentEntry) throw new Error('Entry is undefined')
-  const entryText = currentEntry.text?.trim()
-  if (entryText) {
-    const entryToSet = {
-      ...currentEntry,
-      text: entryText,
-    }
+  const {
+    currentEntry: entry,
+    addEntry,
+    updateEntry,
+    setCurrentEntry,
+  } = useEntries.getState()
+  if (!entry) throw new Error('Entry is undefined')
+  const entryText = entry.text?.trim()
+  if (!entryText) return setCurrentEntry({ text: '' })
 
-    const isFreshEntry = !currentEntry.id
-    if (isFreshEntry) {
-      entryToSet.id = uuidv4()
-      entryToSet.createdAt = new Date()
-      addEntry(entryToSet)
-    } else {
-      entryToSet.updatedAt = new Date()
-      updateEntry(entryToSet)
-    }
-    setCurrentEntry(entryToSet)
+  if (isFresh(entry)) {
+    addEntry({
+      id: uuidv4(),
+      createdAt: new Date().toISOString(),
+      text: entryText,
+    })
+  } else if (isStored(entry)) {
+    updateEntry({
+      ...entry,
+      updatedAt: new Date().toISOString(),
+      text: entryText,
+    })
   }
+}
+
+const isFresh = (entry: Partial<StoredEntry>): entry is FreshEntry =>
+  entry.id === undefined && entry.createdAt === undefined
+
+const isStored = (entry: Partial<StoredEntry>): entry is StoredEntry =>
+  entry.id !== undefined && entry.createdAt !== undefined
+
+type FreshEntry = {
+  text: string
 }

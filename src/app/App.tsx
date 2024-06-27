@@ -86,7 +86,7 @@ export function App() {
       >
         <Flex flexDir={'column'} gap={3} pb={'5dvw'} maxW={'full'}>
           <Heading as="h1">Journalist</Heading>
-          <p>Write to learn and record</p>
+          <p>Record, learn and inform</p>
           <Box
             border={'1px solid'}
             borderRadius={6}

@@ -1,0 +1,6 @@
+export const DRAWER = 'd'
+export const SEARCH = 'f'
+export const NEW_ENTRY = 'e'
+export const COLOR_MODE = 'm'
+export const SAVE = 's'
+export const CLEAR = 'x'

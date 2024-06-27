@@ -17,9 +17,10 @@ import {
 import { RefObject, useState } from 'react'
 import { styleBtnClearEntries, styleBtnDeleteEntry } from './styles'
 import { useEntries } from '@store'
-import { clearDbEntries, deleteDbEntry } from '@utils'
+import { deleteDbEntry } from '@utils'
 import { Tooltip } from '@components'
 import { set } from 'idb-keyval'
+import { StoredEntry } from '@/utils/getEntries'
 
 export const AppDrawer = ({
   isOpen,
@@ -28,7 +29,8 @@ export const AppDrawer = ({
   searchRef,
 }: AppDrawerProps) => {
   const [search, setSearch] = useState<string>('')
-  const { entries, setCurrentEntry, currentEntry, setEntries, clearEntries } = useEntries()
+  const { entries, setCurrentEntry, currentEntry, setEntries, clearEntries } =
+    useEntries()
 
   const [hasSearchTooltipDisabled, setHasSearchTooltipDisabled] = useState(true)
 
@@ -58,17 +60,16 @@ export const AppDrawer = ({
       finalFocusRef={finalFocusRef}
     >
       <DrawerOverlay />
-      <DrawerContent borderRight="1px solid" maxW={200}>
-        <DrawerCloseButton size="sm" mt={2} zIndex={123} />
+      <DrawerContent borderRight="1px solid" maxW={'min(70vw, 300px)'}>
+        <DrawerCloseButton size="sm" mt={1} zIndex={123} />
         <DrawerHeader
           fontSize={'lg'}
-          paddingBlockStart={'12px'}
+          paddingBlockStart={'8px'}
           paddingBlockEnd={0}
           paddingInline={'0 5px'}
         >
-          <Tooltip label="(Ctrl + N)" placement="bottom-start">
+          <Tooltip label="(Ctrl + E)" placement="bottom-start">
             <Button
-              // color={'black'}
               opacity={0.7}
               size={'sm'}
               variant={'ghost'}
@@ -128,12 +129,10 @@ export const AppDrawer = ({
               }}
             />
           </Tooltip>
-          <Stack as="ul" gap={0}>
+          <Stack as="ul" gap={1}>
             {entries
-              .sort((a, b) => b.createdAt!.getTime() - a.createdAt!.getTime())
-              .filter((entry) =>
-                entry.text.toLowerCase().includes(search.toLowerCase())
-              )
+              .sort(byMostRecent)
+              .filter(byQuery(search))
               .map((entry, index) => (
                 <Card
                   position={'relative'}
@@ -148,8 +147,13 @@ export const AppDrawer = ({
                     borderRadius={'none'}
                     outlineOffset={0}
                     border={'none'}
+                    display={'block'}
+                    textAlign={'left'}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
                     px={4}
                     py={2}
+                    paddingInlineEnd={'30px'}
                     m={0}
                     mx={-1}
                     _hover={{
@@ -202,7 +206,6 @@ export const AppDrawer = ({
             {...styleBtnClearEntries}
             leftIcon={<DeleteIcon />}
             onClick={() => {
-              // clearDbEntries()
               clearEntries()
               if (currentEntry?.id) setCurrentEntry({ text: '' })
             }}
@@ -214,6 +217,18 @@ export const AppDrawer = ({
     </Drawer>
   )
 }
+
+
+
+export const byMostRecent = (a: StoredEntry, b: StoredEntry) =>
+  new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+
+export const byQuery = (search: string) => (entry: StoredEntry) =>
+  entry.text.toLowerCase().includes(search.toLowerCase())
+
+
+//TODO: export const toEntryCard = (entry: StoredEntry, index: number) => 
+  
 
 type AppDrawerProps = {
   isOpen: boolean

@@ -1,8 +1,7 @@
-import { get } from 'idb-keyval';
-
+import { get } from 'idb-keyval'
 
 export const getEntries = async () => {
-  const results = await get<StoredEntry[]>('entries') || [];
+  const results = (await get<StoredEntry[]>('entries')) || []
 
   console.log('results', results)
   return results.map((entry: StoredEntry) => ({
@@ -10,12 +9,12 @@ export const getEntries = async () => {
     text: entry.text,
     createdAt: entry.createdAt,
     updatedAt: entry.updatedAt ? entry.updatedAt : undefined,
-  }));
-};
+  }))
+}
 
 export type StoredEntry = {
-  id: string;
-  text: string;
-  createdAt: string;
-  updatedAt?: string;
-};
+  id: string
+  text: string
+  createdAt: string
+  updatedAt?: string
+}

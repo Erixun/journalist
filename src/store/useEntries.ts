@@ -5,23 +5,24 @@ import { set as idbSet } from 'idb-keyval'
 export const useEntries = create<EntryStore>((set, get) => ({
   currentEntry: undefined,
   entries: [],
-  addEntry: (entry) => {
+  addEntry: async (entry) => {
     const appendedEntries = [...get().entries, entry]
+    await idbSet('entries', appendedEntries)
     set({ entries: appendedEntries })
-    idbSet('entries', appendedEntries)
+    set({currentEntry: entry})
   },
   getEntry: (id) => get().entries.find((entry) => entry.id === id),
-  updateEntry: (entry) => {
+  updateEntry: async (entry) => {
     const updatedEntries = get().entries.map((e) =>
       e.id === entry.id ? entry : e
     )
+    await idbSet('entries', updatedEntries)
     set({
       entries: updatedEntries,
     })
-    idbSet('entries', updatedEntries)
+    set({currentEntry: entry})
   },
-  deleteEntry: (id) =>
-  {
+  deleteEntry: (id) => {
     const filteredEntries = get().entries.filter((e) => e.id !== id)
     set({ entries: filteredEntries })
     idbSet('entries', filteredEntries)
@@ -34,7 +35,7 @@ export const useEntries = create<EntryStore>((set, get) => ({
   },
 }))
 
-export type EntryStore = {
+type EntryStore = {
   currentEntry?: Partial<StoredEntry>
   entries: StoredEntry[]
   addEntry: (entry: StoredEntry) => void
