@@ -1,8 +1,10 @@
 import { useEntries } from '@store'
 import { v4 as uuidv4 } from 'uuid'
 import { StoredEntry } from './getEntries'
+import { FormEvent, FormEventHandler } from 'react'
 
-export const submitEntry = () => {
+export const submitEntry: FormEventHandler = (ev: FormEvent) => {
+  ev.preventDefault()
   const {
     currentEntry: entry,
     addEntry,

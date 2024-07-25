@@ -59,7 +59,7 @@ export const AppDrawer = ({
     >
       <DrawerOverlay />
       <DrawerContent borderRight="1px solid" maxW={'min(70vw, 300px)'}>
-        <DrawerCloseButton size="sm" mt={1} zIndex={123} />
+        <DrawerCloseButton size="md" mt={1} zIndex={123} />
         <DrawerHeader
           fontSize={'lg'}
           paddingBlockStart={'8px'}
@@ -68,8 +68,9 @@ export const AppDrawer = ({
         >
           <Tooltip label="(Ctrl + E)" placement="bottom-start">
             <Button
+              width={'100%'}
               opacity={0.7}
-              size={'sm'}
+              size={'md'}
               variant={'ghost'}
               outline={'none'}
               boxShadow={'none'}
@@ -89,7 +90,7 @@ export const AppDrawer = ({
               paddingInlineEnd={10}
               rounded={0}
               border={'none'}
-              leftIcon={<AddIcon />}
+              leftIcon={<AddIcon style={{ marginBottom: -3 }} />}
               onClick={() => {
                 setCurrentEntry({ text: '' })
                 onClose()
@@ -107,6 +108,7 @@ export const AppDrawer = ({
             isDisabled={hasSearchTooltipDisabled}
           >
             <Input
+              size={'lg'}
               placeholder="Search entries..."
               ref={searchRef}
               id="search"
@@ -197,6 +199,7 @@ export const AppDrawer = ({
         <DrawerFooter
           justifyContent={'center'}
           p={0}
+          paddingBlockEnd={2}
           overflowX={'hidden'}
           overflowY={'visible'}
         >

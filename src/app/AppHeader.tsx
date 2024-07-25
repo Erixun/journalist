@@ -29,6 +29,7 @@ export const AppHeader = ({
       <Container maxW="full" textAlign={'right'} padding={1}>
         <Tooltip label="View history (Ctrl + D)">
           <IconButton
+            size={'lg'}
             alignSelf={'start'}
             aria-label={'Toggle dark mode'}
             icon={<TimeIcon />}
@@ -39,6 +40,7 @@ export const AppHeader = ({
         </Tooltip>
         <Tooltip label="Toggle theme (Ctrl + M)">
           <IconButton
+            size={'lg'}
             aria-label={'Toggle dark mode'}
             icon={colorMode === 'dark' ? <SunIcon /> : <MoonIcon />}
             onClick={handleToggleTheme}

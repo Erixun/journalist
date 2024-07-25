@@ -86,8 +86,10 @@ export function App() {
       >
         <Flex flexDir={'column'} gap={3} pb={'5dvw'} maxW={'full'}>
           <Heading as="h1">Journalist</Heading>
-          <p>Record, learn and inform</p>
+          <em style={{opacity: 0.8, marginTop: -8, marginBottom: 5}}>Record, learn and inform</em>
           <Box
+            as={'form'}
+            onSubmit={submitEntry}
             border={'1px solid'}
             borderRadius={6}
             borderWidth={2}
@@ -130,7 +132,7 @@ export function App() {
                       _focusVisible={{ outline: '2px solid black' }}
                       _active={{ color: 'white', bg: 'black' }}
                       rounded={'none'}
-                      icon={<SmallCloseIcon />}
+                      icon={<SmallCloseIcon boxSize={6} />}
                       aria-label={'Clear entry'}
                       onClick={clearEntry}
                     />
@@ -158,9 +160,10 @@ export function App() {
                       }}
                       rounded={'none'}
                       transition={'all 0.1s'}
-                      icon={<ArrowForwardIcon />}
+                      icon={<ArrowForwardIcon boxSize={6} />}
                       aria-label={'Submit'}
-                      onClick={submitEntry}
+                      type="submit"
+                      // onClick={submitEntry}
                     />
                   </Tooltip>
                 </>
