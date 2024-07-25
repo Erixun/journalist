@@ -34,11 +34,13 @@ const theme = extendTheme({ config })
 export function App() {
   const { currentEntry, setCurrentEntry, setEntries } = useEntries()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const submitBtnRef = useRef<HTMLButtonElement | null>(null)
   const drawerBtnRef = useRef<HTMLButtonElement | null>(null)
   const themeBtnRef = useRef<HTMLButtonElement | null>(null)
   const searchRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const keyDownHandler = handleKeyDown(
+    submitBtnRef,
     drawerBtnRef,
     themeBtnRef,
     searchRef,
@@ -86,7 +88,9 @@ export function App() {
       >
         <Flex flexDir={'column'} gap={3} pb={'5dvw'} maxW={'full'}>
           <Heading as="h1">Journalist</Heading>
-          <em style={{opacity: 0.8, marginTop: -8, marginBottom: 5}}>Record, learn and inform</em>
+          <em style={{ opacity: 0.8, marginTop: -8, marginBottom: 5 }}>
+            Record, learn and inform
+          </em>
           <Box
             as={'form'}
             onSubmit={submitEntry}
@@ -139,6 +143,7 @@ export function App() {
                   </Tooltip>
                   <Tooltip label="Save entry (Ctrl + S)">
                     <IconButton
+                      ref={submitBtnRef}
                       alignSelf={'end'}
                       variant="ghost"
                       border={'none'}

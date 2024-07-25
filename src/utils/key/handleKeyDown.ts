@@ -1,10 +1,11 @@
 import { MutableRefObject, RefObject } from 'react'
-import { clearEntry, createNewEntry, submitEntry } from '@utils'
+import { clearEntry, createNewEntry } from '@utils'
 import * as key from './constant'
 import { isValid } from './isValid'
 
 export const handleKeyDown =
   (
+    submitBtnRef: MutableRefObject<HTMLButtonElement | null>,
     drawerBtnRef: MutableRefObject<HTMLButtonElement | null>,
     themeBtnRef: MutableRefObject<HTMLButtonElement | null>,
     searchRef: RefObject<HTMLInputElement>,
@@ -31,7 +32,7 @@ export const handleKeyDown =
           themeBtnRef.current?.click()
           break
         case key.SAVE:
-          submitEntry()
+          submitBtnRef.current?.click()
           break
         case key.CLEAR:
           clearEntry()
